@@ -1,6 +1,6 @@
-DATA_ROOT=/root/summarization_experiment/cnn_dm
+DATA_ROOT=/root/oleksandry/summarization_experiment/cnn_dm
 CHECKPOINT_PATH="/dataset/c07bd62b/finetune_checkpoints"
-SAVE_PATH=/root/summarization_experiment/cnn_dm/finetune_checkpoints
+SAVE_PATH=/root/oleksandry/summarization_experiment/cnn_dm/finetune_checkpoints
 DATESTR=$(date +"%m-%d-%H-%M")
 
 source $1    # Model

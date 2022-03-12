@@ -1,4 +1,4 @@
-cd ~/
+cd ~/oleksandry
 mkdir summarization_experiment
 cd summarization_experiment
 #download my scripts
@@ -10,12 +10,12 @@ pip install sentencepiece
 pip install gdown
 gdown --id 0BwmD_VLjROrfTTljRDVZMFJnVWM
 gdown --id 0BwmD_VLjROrfM1BxdkxVaTY2bWs
-#tar zxvf cnn_stories.tgz
-#tar zxvf dailymail_stories.tgz
+tar zxvf cnn_stories.tgz
+tar zxvf dailymail_stories.tgz
 git clone https://github.com/artmatsak/cnn-dailymail.git
 python3 cnn-dailymail/make_datafiles.py cnn/stories dailymail/stories
 #preprocess data
-python3 privacy-preserving/ner_1.py cnn_dm
+python3 privacy-preserving/ner_roberta.py cnn_dm
 #download glm
 git clone https://github.com/THUDM/GLM
 cd GLM
