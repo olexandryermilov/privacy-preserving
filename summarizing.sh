@@ -1,6 +1,8 @@
 cd ~/oleksandry
 mkdir summarization_experiment
 cd summarization_experiment
+sudo apt install libopenmpi-dev
+pip install mpi4py
 #download my scripts
 git clone https://github.com/olexandryermilov/privacy-preserving.git
 pip install --upgrade pip
@@ -8,9 +10,9 @@ pip install transformers[torch]
 pip install sentencepiece
 #download data
 pip install gdown
-gdown --id 0BwmD_VLjROrfTTljRDVZMFJnVWM
+gdown --id 0BwmD_VLjROrfTHk4NFg2SndKcjQ
 gdown --id 0BwmD_VLjROrfM1BxdkxVaTY2bWs
-tar zxvf cnn_stories.tgz
+tar zxvf cnn.tgz
 tar zxvf dailymail_stories.tgz
 git clone https://github.com/artmatsak/cnn-dailymail.git
 python3 cnn-dailymail/make_datafiles.py cnn/stories dailymail/stories
@@ -28,3 +30,5 @@ pip3 install -r requirements.txt
 bash scripts/ds_finetune_seq2seq.sh \
    config_tasks/model_blocklm_10B.sh \
    config_tasks/seq_cnndm_org.sh
+bash scripts/evaluate_seq2seq.sh \
+ ./runs/experiment_name/test.jsonl.hyps ./runs/experiment_name/test.jsonl.refs
