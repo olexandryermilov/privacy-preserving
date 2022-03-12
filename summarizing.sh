@@ -21,7 +21,8 @@ git clone https://github.com/THUDM/GLM
 cd GLM
 #change ds_finetune in case I have my own dataset path
 yes | cp -rf ../privacy-preserving/ds_finetune_seq2seq.sh ./scripts/
-pip3 install pytorch
+pip3 install torch
+pip3 install deepspeed
 pip3 install -r requirements.txt
 #run training
 bash scripts/ds_finetune_seq2seq.sh \
