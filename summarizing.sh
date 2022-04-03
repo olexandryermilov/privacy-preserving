@@ -1,12 +1,12 @@
 cd ~/
 mkdir summarization_experiment
 cd summarization_experiment
-sudo apt install libopenmpi-dev
+sudo apt install libopenmpi-dev | 1
 pip install mpi4py
-git clone https://github.com/NVIDIA/apex
-cd apex
-pip install -v --disable-pip-version-check --no-cache-dir \
---global-option="--cpp_ext" --global-option="--cuda_ext" ./
+#git clone https://github.com/NVIDIA/apex
+#cd apex
+#pip install -v --disable-pip-version-check --no-cache-dir \
+#--global-option="--cpp_ext" --global-option="--cuda_ext" ./
 #download my scripts
 git clone https://github.com/olexandryermilov/privacy-preserving.git
 pip install --upgrade pip
