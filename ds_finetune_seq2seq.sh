@@ -7,7 +7,7 @@ source $1    # Model
 source $2    # Task
 
 NUM_WORKERS=1
-NUM_GPUS_PER_WORKER=2
+NUM_GPUS_PER_WORKER=1
 HOST_FILE_PATH="./hostfile"
 MP_SIZE=1
 MASTER_PORT=12345
