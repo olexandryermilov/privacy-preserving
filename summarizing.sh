@@ -14,8 +14,8 @@ pip install transformers[torch]
 pip install sentencepiece
 #download data
 pip install gdown
-gdown --id 0BwmD_VLjROrfTHk4NFg2SndKcjQ
-gdown --id 0BwmD_VLjROrfM1BxdkxVaTY2bWs
+#gdown 0BwmD_VLjROrfTHk4NFg2SndKcjQ
+#gdown 0BwmD_VLjROrfM1BxdkxVaTY2bWs
 tar zxvf cnn_stories.tgz
 tar zxvf dailymail_stories.tgz
 git clone https://github.com/artmatsak/cnn-dailymail.git
