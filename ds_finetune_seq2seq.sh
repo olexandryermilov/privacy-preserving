@@ -13,6 +13,27 @@ MP_SIZE=1
 MASTER_PORT=12345
 TASK_NAME=cnn_dm
 DATA_PATH=/root/oleksandry/summarization_experiment/cnn_dm/
+TRAIN_ARGS="--epochs 15 \
+            --batch-size 8 \
+            --lr 3e-5 \
+            --lr-decay-style linear \
+            --warmup 0.06 \
+            --weight-decay 1.0e-1 \
+            --label-smoothing 0.1"
+
+COMMON_ARGS="--save-interval 10000 \
+             --log-interval 50 \
+             --eval-interval 1000 \
+             --eval-iters 100"
+
+TASK_ARGS="--src-seq-length 608 \
+           --tgt-seq-length 160 \
+           --min-tgt-length 55 \
+           --length-penalty 0.7 \
+           --no-repeat-ngram-size 3 \
+           --num-beams 5 \
+           --select-topk \
+           --eval-batch-size 4"
 
 OPTIONS_NCCL="NCCL_DEBUG=info NCCL_IB_DISABLE=0 NCCL_NET_GDR_LEVEL=2"
 DISTRIBUTED_ARGS="${OPTIONS_NCCL} deepspeed --hostfile ${HOST_FILE_PATH} --master_port ${MASTER_PORT} --num_nodes ${NUM_WORKERS} --num_gpus ${NUM_GPUS_PER_WORKER}"
@@ -30,7 +51,6 @@ run_cmd="${DISTRIBUTED_ARGS} finetune_glm.py \
        --checkpoint-activations \
        --num-workers 1 \
        --no-load-lr-scheduler \
-       --src-seq-length 50\
        $MODEL_ARGS \
        $TRAIN_ARGS \
        $COMMON_ARGS \
