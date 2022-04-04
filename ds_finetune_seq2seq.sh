@@ -30,7 +30,7 @@ run_cmd="${DISTRIBUTED_ARGS} finetune_glm.py \
        --checkpoint-activations \
        --num-workers 1 \
        --no-load-lr-scheduler \
-       --src_seq_length 50\
+       --src-seq-length 50\
        $MODEL_ARGS \
        $TRAIN_ARGS \
        $COMMON_ARGS \
