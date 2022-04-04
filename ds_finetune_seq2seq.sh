@@ -1,4 +1,4 @@
-DATA_ROOT=/root/yermilov/summarization_experiment/cnn_dm
+DATA_ROOT=~/summarization_experiment/cnn_dm
 CHECKPOINT_PATH="/dataset/c07bd62b/finetune_checkpoints"
 SAVE_PATH=~/summarization_experiment/cnn_dm/finetune_checkpoints
 DATESTR=$(date +"%m-%d-%H-%M")
@@ -12,7 +12,7 @@ HOST_FILE_PATH="./hostfile"
 MP_SIZE=1
 MASTER_PORT=12345
 TASK_NAME=cnn_dm
-DATA_PATH=/root/yermilov/summarization_experiment/cnn_dm/
+DATA_PATH=~/summarization_experiment/cnn_dm/
 TRAIN_ARGS="--epochs 15 \
             --batch-size 8 \
             --lr 3e-5 \
