@@ -11,8 +11,8 @@ NUM_GPUS_PER_WORKER=1
 HOST_FILE_PATH="./hostfile"
 MP_SIZE=1
 MASTER_PORT=12345
-TASK_NAME = seq2seq
-DATA_PATH = "/root/oleksandry/summarization_experiment/cnn_dm/"
+TASK_NAME = cnn_dm
+DATA_PATH = /root/oleksandry/summarization_experiment/cnn_dm/
 
 OPTIONS_NCCL="NCCL_DEBUG=info NCCL_IB_DISABLE=0 NCCL_NET_GDR_LEVEL=2"
 DISTRIBUTED_ARGS="${OPTIONS_NCCL} deepspeed --hostfile ${HOST_FILE_PATH} --master_port ${MASTER_PORT} --num_nodes ${NUM_WORKERS} --num_gpus ${NUM_GPUS_PER_WORKER}"
