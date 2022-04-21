@@ -7,11 +7,17 @@ def readFile(filePath):
   f = open(filePath, "r")
   return f.read()
 
-def writeFile(filePath, content):
+def writeFileCSV(filePath, content):
     f = open(filePath, "w")
     f.write("text,summary\n")
     for e in content:
         f.write(e[0] + ',' + e[1] + "\n")
+    f.close()
+
+def writeFileJSON(filePath, content):
+    f = open(filePath, "w")
+    for e in content:
+        f.write('{"text": "' + e[0].replace('"', '\\"') + '","summary": "' + e[1].replace('"', '\\"') + '"}\n')
     f.close()
 
 def processFile(filePath, fileName):
@@ -20,7 +26,7 @@ def processFile(filePath, fileName):
     together = list(zip(source, target))
     #df = pd.DataFrame(data = together, columns = ["text", "summary"])
     #df.to_csv(fileName + '.csv', index = False,quoting=csv.QUOTE_NONE, quotechar="",  escapechar="\\")
-    writeFile(filePath+fileName+".csv", together)
+    writeFileJSON(filePath+fileName+".jsonlines", together)
     return
 
 def main():
