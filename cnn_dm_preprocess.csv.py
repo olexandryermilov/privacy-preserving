@@ -16,8 +16,10 @@ def writeFileCSV(filePath, content):
 
 def writeFileJSON(filePath, content):
     f = open(filePath, "w")
+    f.write('{"data":[')
     for e in content:
-        f.write('{"text": "' + e[0].replace('"', '') + '","summary": "' + e[1].replace('"', '') + '"}\n')
+        f.write('{"text": "' + e[0].replace('"', '') + '","summary": "' + e[1].replace('"', '') + '"},\n')
+    f.write(']}')
     f.close()
 
 def processFile(filePath, fileName):
