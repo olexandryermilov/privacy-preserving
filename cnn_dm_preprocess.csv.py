@@ -43,8 +43,7 @@ def replaceNEWithEntityGroup(text, parsed_named_entities):
   return anonymizedText
 
 
-def anonymizeCorpus(filePath):
-  corpus = readFile(filePath)
+def anonymizeCorpus(corpus):
   named_entities = obtain_named_entities(corpus)
   anonymized_corpus = replaceNEWithEntityGroup(corpus, named_entities)
   return anonymized_corpus
