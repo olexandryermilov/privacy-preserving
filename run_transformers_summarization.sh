@@ -2,8 +2,8 @@ python3 ~/summarization_experiment/transformers/examples/pytorch/summarization/r
     --model_name_or_path t5-small \
     --do_train \
     --do_eval \
-    --train_file ~/summarization_experiment/cnn_dm/train.csv \
-    --validation_file ~/summarization_experiment/cnn_dm/val.csv \
+    --train_file ~/summarization_experiment/cnn_dm/train.json \
+    --validation_file ~/summarization_experiment/cnn_dm/val.json \
     --source_prefix "summarize: " \
     --output_dir ./tst-summarization \
     --overwrite_output_dir \

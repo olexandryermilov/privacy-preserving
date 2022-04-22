@@ -17,7 +17,7 @@ def writeFileCSV(filePath, content):
 def writeFileJSON(filePath, content):
     f = open(filePath, "w")
     for e in content:
-        f.write('{"text": "' + e[0].replace('"', '\\"') + '","summary": "' + e[1].replace('"', '\\"') + '"}\n')
+        f.write('{"text": "' + e[0].replace('"', '') + '","summary": "' + e[1].replace('"', '') + '"}\n')
     f.close()
 
 def processFile(filePath, fileName):
@@ -26,7 +26,7 @@ def processFile(filePath, fileName):
     together = list(zip(source, target))
     #df = pd.DataFrame(data = together, columns = ["text", "summary"])
     #df.to_csv(fileName + '.csv', index = False,quoting=csv.QUOTE_NONE, quotechar="",  escapechar="\\")
-    writeFileJSON(filePath+fileName+".jsonlines", together)
+    writeFileJSON(filePath+fileName+".json", together)
     return
 
 def main():
