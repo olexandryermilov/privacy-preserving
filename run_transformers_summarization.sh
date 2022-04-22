@@ -9,7 +9,9 @@ python3 ~/summarization_experiment/transformers/examples/pytorch/summarization/r
     --overwrite_output_dir \
     --per_device_train_batch_size=4 \
     --per_device_eval_batch_size=4 \
-    --predict_with_generate
+    --predict_with_generate \
+    --text_column text \
+    --summary_column summary
 
 python3 examples/pytorch/summarization/run_summarization.py \
     --model_name_or_path t5-small \
