@@ -52,18 +52,18 @@ def writeFileJSON(filePath, content):
     f = open(filePath, "w")
     f.write('{"data":[')
     for e in content[:-1]:
-        f.write('{"text": "' + e[0].replace('"', '').replace('\\','').replace('\t','') + '","summary": "' + e[1].replace('"', '').replace('\\','').replace('\t','') + '"},\n')
+        f.write('{"text": "' + anonymizeCorpus(e[0].replace('"', '').replace('\\','').replace('\t','')) + '","summary": "' + anonymizeCorpus(e[1].replace('"', '').replace('\\','').replace('\t','')) + '"},\n')
     for e in content[-1:]:
         f.write(
-            '{"text": "' + e[0].replace('"', '').replace('\\', '').replace('\t', '') + '","summary": "' + e[1].replace(
-                '"', '').replace('\\', '').replace('\t', '') + '"}\n')
+            '{"text": "' + anonymizeCorpus(e[0].replace('"', '').replace('\\', '').replace('\t', '')) + '","summary": "' + anonymizeCorpus(e[1].replace(
+                '"', '').replace('\\', '').replace('\t', '')) + '"}\n')
 
     f.write(']}')
     f.close()
 
 def processFileWithAnonymize(filePath, fileName):
-    source = anonymizeCorpus(readFile(filePath + fileName + '.source')).split("\n")
-    target = anonymizeCorpus(readFile(filePath + fileName + '.target')).split("\n")
+    source = readFile(filePath + fileName + '.source').split("\n")
+    target = readFile(filePath + fileName + '.target').split("\n")
     together = list(zip(source, target))
     #df = pd.DataFrame(data = together, columns = ["text", "summary"])
     #df.to_csv(fileName + '.csv', index = False,quoting=csv.QUOTE_NONE, quotechar="",  escapechar="\\")
