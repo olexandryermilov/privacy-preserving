@@ -18,7 +18,7 @@ def writeFileJSON(filePath, content):
     f = open(filePath, "w")
     f.write('{"data":[')
     for e in content:
-        f.write('{"text": "' + e[0].replace('"', '').replace('\\','') + '","summary": "' + e[1].replace('"', '').replace('\\','') + '"},\n')
+        f.write('{"text": "' + e[0].replace('"', '').replace('\\','').replace('\t','') + '","summary": "' + e[1].replace('"', '').replace('\\','').replace('\t','') + '"},\n')
 #f.write(']}')
     f.close()
 
