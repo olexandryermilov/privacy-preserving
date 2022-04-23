@@ -24,7 +24,7 @@ python3 ~/summarization_experiment/transformers/examples/pytorch/summarization/r
     --validation_file ~/summarization_experiment/cnn_dm/val.json \
     --test_file ~/summarization_experiment/cnn_dm/test.json \
     --source_prefix "summarize: " \
-    --output_dir ./tst-summarization \
+    --output_dir ./bart-tst-summarization \
     --per_device_train_batch_size=4 \
     --per_device_eval_batch_size=4 \
     --predict_with_generate \
