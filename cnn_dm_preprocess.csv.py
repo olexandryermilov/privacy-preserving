@@ -3,6 +3,8 @@ import sys
 import pandas as pd
 from transformers import pipeline, AutoModelForTokenClassification, AutoTokenizer
 import csv
+from tqdm import tqdm
+import json
 
 model = AutoModelForTokenClassification.from_pretrained("Davlan/xlm-roberta-large-ner-hrl")
 tokenizer = AutoTokenizer.from_pretrained("Davlan/xlm-roberta-large-ner-hrl")
@@ -48,43 +50,55 @@ def anonymizeCorpus(corpus):
   anonymized_corpus = replaceNEWithEntityGroup(corpus, named_entities)
   return anonymized_corpus
 
-def writeFileJSON(filePath, content):
+def writeFileJSONAnon(filePath, content, anonFunc):
     f = open(filePath, "w")
     f.write('{"data":[')
-    for e in content[:-1]:
-        f.write('{"text": "' + anonymizeCorpus(e[0].replace('"', '').replace('\\','').replace('\t','')) + '","summary": "' + anonymizeCorpus(e[1].replace('"', '').replace('\\','').replace('\t','')) + '"},\n')
+    for e in tqdm(content[:-1]):
+        f.write('{"text": "' + anonFunc(e[0].replace('"', '').replace('\\','').replace('\t','')) + '","summary": "' + anonFunc(e[1].replace('"', '').replace('\\','').replace('\t','')) + '"},\n')
     for e in content[-1:]:
         f.write(
-            '{"text": "' + anonymizeCorpus(e[0].replace('"', '').replace('\\', '').replace('\t', '')) + '","summary": "' + anonymizeCorpus(e[1].replace(
+            '{"text": "' + anonFunc(e[0].replace('"', '').replace('\\', '').replace('\t', '')) + '","summary": "' + anonFunc(e[1].replace(
                 '"', '').replace('\\', '').replace('\t', '')) + '"}\n')
 
     f.write(']}')
     f.close()
 
-def processFileWithAnonymize(filePath, fileName):
+def writeFileJSON(filePath, content):
+    f = open(filePath, "w")
+    f.write('{"data":[')
+    for e in tqdm(content[:-1]):
+        f.write('{"text": "' + e[0].replace('"', '').replace('\\','').replace('\t','') + '","summary": "' + e[1].replace('"', '').replace('\\','').replace('\t','') + '"},\n')
+    for e in content[-1:]:
+        f.write(
+            '{"text": "' + e[0].replace('"', '').replace('\\', '').replace('\t', '') + '","summary": "' + e[1].replace(
+                '"', '').replace('\\', '').replace('\t', '') + '"}\n')
+
+    f.write(']}')
+    f.close()
+
+def processFile(filePath, fileName, anonymize, methodFunc, methodName):
     source = readFile(filePath + fileName + '.source').split("\n")
     target = readFile(filePath + fileName + '.target').split("\n")
     together = list(zip(source, target))
-    #df = pd.DataFrame(data = together, columns = ["text", "summary"])
-    #df.to_csv(fileName + '.csv', index = False,quoting=csv.QUOTE_NONE, quotechar="",  escapechar="\\")
-    writeFileJSON(filePath+fileName+"_anonymized.json", together)
+    if anonymize:
+        writeFileJSONAnon(filePath+fileName+"_anonymized_"+methodName+".json", together)
+    else:
+        writeFileJSON(filePath+fileName+".json", together)
     return
 
-def processFile(filePath, fileName):
-    source = (readFile(filePath + fileName + '.source')).split("\n")
-    target = (readFile(filePath + fileName + '.target')).split("\n")
-    together = list(zip(source, target))
-    #df = pd.DataFrame(data = together, columns = ["text", "summary"])
-    #df.to_csv(fileName + '.csv', index = False,quoting=csv.QUOTE_NONE, quotechar="",  escapechar="\\")
-    writeFileJSON(filePath+fileName+".json", together)
-    return
 
 def main():
     path = sys.argv[1]
     if sys.argv[2] == 'anon':
-        processFileWithAnonymize(path, 'train')
-        processFileWithAnonymize(path, 'test')
-        processFileWithAnonymize(path, 'val')
+        methodName = sys.argv[3]
+        if methodName == 'ner-placeholder':
+            method = anonymizeCorpus
+        processFile(path, 'train', True, method, methodName)
+        processFile(path,  'test', True, method, methodName)
+        processFile(path,   'val', True, method, methodName)
+        if methodName == 'ner-placeholder':
+            with open('placeholders.json', 'wb') as f:
+                json.dump(placeholders_map, f)
     else:
         processFile(path, 'train')
         processFile(path, 'test')
