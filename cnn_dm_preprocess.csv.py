@@ -51,10 +51,14 @@ def anonymizeCorpus(corpus):
   return anonymized_corpus
 
 def writeFileJSONAnon(filePath, content, anonFunc):
-    f = open(filePath, "w")
+    f = open(filePath, "a")
     f.write('{"data":[')
+    f.close()
     for e in tqdm(content[:-1]):
+        f = open(filePath, "a")
         f.write('{"text": "' + anonFunc(e[0].replace('"', '').replace('\\','').replace('\t','')) + '","summary": "' + anonFunc(e[1].replace('"', '').replace('\\','').replace('\t','')) + '"},\n')
+        f.close()
+    f = open(filePath, "a")
     for e in content[-1:]:
         f.write(
             '{"text": "' + anonFunc(e[0].replace('"', '').replace('\\', '').replace('\t', '')) + '","summary": "' + anonFunc(e[1].replace(
