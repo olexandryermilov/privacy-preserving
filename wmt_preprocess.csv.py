@@ -86,8 +86,8 @@ def writeFileJSON(filePath, content):
     f.close()
 
 def processFile(filePath, fileName, anonymize, methodFunc, methodName):
-    source = readFile(filePath + fileName + '.source').split("\n")
-    target = readFile(filePath + fileName + '.target').split("\n")
+    source = readFile(filePath + fileName + '.en').split("\n")
+    target = readFile(filePath + fileName + '.de').split("\n")
     together = list(zip(source, target))
     if anonymize:
         writeFileJSONAnon(filePath+fileName+"_anonymized_"+methodName+".json", together, methodFunc)
