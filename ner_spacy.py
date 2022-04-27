@@ -1,9 +1,5 @@
-import os
 
 import sys
-from flair.models import SequenceTagger
-from flair.data import Sentence
-from segtok.segmenter import split_single
 from tqdm import tqdm
 import json
 
