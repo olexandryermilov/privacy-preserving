@@ -6,6 +6,7 @@ import json
 import spacy
 
 NER = spacy.load("en_core_web_sm")
+#DE_NER = spacy.load("de_core_news_sm")
 
 entity_map = dict()
 placeholders_map = dict()
@@ -108,12 +109,12 @@ def main():
         methodName = sys.argv[3]
         if methodName == 'ner-placeholder':
             method = anonymizeCorpus
-        processFile(path, 'train', True, method, methodName)
-        processFile(path,  'test', True, method, methodName)
-        processFile(path,   'val', True, method, methodName)
+        processFile(path, 'train1', True, method, methodName)
+        #processFile(path,  'test', True, method, methodName)
+        #processFile(path,   'val', True, method, methodName)
         if methodName == 'ner-placeholder':
-            with open('placeholders_spacy.json', 'wb') as f:
-                json.dump(placeholders_map, f)
+            with open('placeholders_spacy.json', 'w') as f:
+                f.write(json.dumps(entity_map))
     else:
         processFile(path, 'train', False, None, "")
         processFile(path, 'test', False, None, "")
