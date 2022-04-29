@@ -97,7 +97,7 @@ def processFile(filePath, fileName, anonymize, methodFunc, methodName):
     target = readFile(filePath + fileName + '.target').split("\n")
     together = list(zip(source, target))
     if anonymize:
-        writeFileJSONAnon(filePath+fileName+"_anonymized_spacy_"+methodName+".json", together, methodFunc)
+        writeFileJSONAnon(filePath+fileName+"_anonymized_spacy1_"+methodName+".json", together, methodFunc)
     else:
         writeFileJSON(filePath+fileName+".json", together)
     return
@@ -109,9 +109,9 @@ def main():
         methodName = sys.argv[3]
         if methodName == 'ner-placeholder':
             method = anonymizeCorpus
-        processFile(path, 'train1', True, method, methodName)
-        #processFile(path,  'test', True, method, methodName)
-        #processFile(path,   'val', True, method, methodName)
+        processFile(path, 'train', True, method, methodName)
+        processFile(path,  'test', True, method, methodName)
+        processFile(path,   'val', True, method, methodName)
         if methodName == 'ner-placeholder':
             with open('placeholders_spacy.json', 'w') as f:
                 f.write(json.dumps(entity_map))
