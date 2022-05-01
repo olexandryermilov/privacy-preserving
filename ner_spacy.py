@@ -1,7 +1,7 @@
-
 import sys
 from tqdm import tqdm
 import json
+import numpy as np
 
 import spacy
 
@@ -11,8 +11,35 @@ DE_NER = spacy.load("de_core_news_sm")
 entity_map = dict()
 placeholders_map = dict()
 
-
 total = 0
+
+def readPlaceholderMap():
+    with open("placeholders_spacy_summarization1.json", "r") as file:
+        entities = dict()
+        data = json.load(file)
+        for k in tqdm(data):
+            splitted = data[k].split("_")
+            entity = " ".join(splitted[0:-1])
+            num = int(splitted[-1])
+            if entity in entities:
+                entities[entity] = max(entities[entity], num)
+            else:
+                entities[entity] = num
+        return data, entities
+
+def numFromPlaceholder(placeholder):
+    return int(placeholder.split("_")[-1])
+
+def createPermutationsForEntities(entities):
+    permutations = dict()
+    for k in entities:
+        perm = np.random.permutation(np.arange(entities[k]))
+        permutation = dict()
+        for i in range(len(perm)):
+            permutation[i+1] = perm[i] + 1
+        permutations[k] = permutation
+    return permutations
+
 def readFile(filePath):
   f = open(filePath, "r")
   return f.read()
@@ -23,6 +50,30 @@ def writeFileCSV(filePath, content):
     for e in content:
         f.write(e[0] + ',' + e[1] + "\n")
     f.close()
+
+def invertMap(map):
+    nv_map = {v: k for k, v in map.items()}
+    return nv_map
+
+def anonymizeCorpusPermutation(corpus, f, ner):
+  processed = ner(corpus)
+  res = []
+  result = 0
+  placeholders_map, max_entities = readPlaceholderMap()
+  permutations = createPermutationsForEntities(max_entities)
+  inv_placeholders = invertMap(placeholders_map)
+  for entity in processed:
+      if entity.ent_type_:
+          result += 1
+          entity_word = entity.text
+          replacement = placeholders_map[entity_word]
+          permutation = permutations[entity.ent_type_]
+          number_of_placeholder = permutation[numFromPlaceholder(replacement)]
+          res.append(inv_placeholders[entity.ent_type_ + "_" + str(number_of_placeholder)])
+      else:
+          res.append(entity.text)
+  write(f, " ".join(res))
+  return result
 
 def anonymizeCorpus(corpus, f, ner):
   processed = ner(corpus)
@@ -72,7 +123,6 @@ def writeFileJSONAnon(filePath, content, anonFunc, task):
         f.write('","summary": "')
         result += anonFunc(e[1].replace('"', '').replace('\\','').replace('\t',''), f, ner_target)
         f.write('"},\n')
-        #f.write('{"text": "' + anonFunc(e[0].replace('"', '').replace('\\','').replace('\t','')) + '","summary": "' + anonFunc(e[1].replace('"', '').replace('\\','').replace('\t','')) + '"},\n')
         f.close()
     f = open(filePath, "a")
     for e in content[-1:]:
@@ -107,7 +157,7 @@ def processFile(filePath, fileName, anonymize, methodFunc, methodName, task):
     target = readFile(filePath + fileName + '.target').split("\n")
     together = list(zip(source, target))
     if anonymize:
-        writeFileJSONAnon(filePath+fileName+"_anonymized_spacy1_"+methodName+".json", together, methodFunc, task)
+        writeFileJSONAnon(filePath+fileName+"_anonymized_spacy2_"+methodName+".json", together, methodFunc, task)
     else:
         writeFileJSON(filePath+fileName+".json", together)
     return
@@ -120,11 +170,13 @@ def main():
         task = sys.argv[4]
         if methodName == 'ner-placeholder':
             method = anonymizeCorpus
-        processFile(path, 'train1', True, method, methodName, task)
+        elif methodName == "ner-permutation":
+            method = anonymizeCorpusPermutation
+        processFile(path, 'train', True, method, methodName, task)
         processFile(path,  'test', True, method, methodName, task)
         processFile(path,   'val', True, method, methodName, task)
         if methodName == 'ner-placeholder':
-            with open(f'placeholders_spacy_{task}.json', 'w') as f:
+            with open(f'placeholders_spacy_{task}1.json', 'w') as f:
                 f.write(json.dumps(entity_map))
     else:
         processFile(path, 'train', False, None, "", "")
