@@ -65,7 +65,10 @@ def anonymizeCorpusPermutation(corpus, f, ner):
           entity_word = entity.text
           replacement = placeholders_map[entity_word]
           permutation = permutations[entity.ent_type_]
-          number_of_placeholder = permutation[numFromPlaceholder(replacement)]
+          try:
+            number_of_placeholder = permutation[numFromPlaceholder(replacement)]
+          except:
+            print(f"{entity.ent_type_} {numFromPlaceholder(replacement)} {entity_word}")
           res.append(inv_placeholders[entity.ent_type_ + "_" + str(number_of_placeholder)])
       else:
           res.append(entity.text)
