@@ -19,7 +19,7 @@ def readPlaceholderMap():
         data = json.load(file)
         for k in tqdm(data):
             splitted = data[k].split("_")
-            entity = " ".join(splitted[0:-1])
+            entity = "_".join(splitted[0:-1])
             num = int(splitted[-1])
             if entity in entities:
                 entities[entity] = max(entities[entity], num)
@@ -59,9 +59,6 @@ def anonymizeCorpusPermutation(corpus, f, ner):
   processed = ner(corpus)
   res = []
   result = 0
-  placeholders_map, max_entities = readPlaceholderMap()
-  permutations = createPermutationsForEntities(max_entities)
-  inv_placeholders = invertMap(placeholders_map)
   for entity in processed:
       if entity.ent_type_:
           result += 1
@@ -162,6 +159,10 @@ def processFile(filePath, fileName, anonymize, methodFunc, methodName, task):
         writeFileJSON(filePath+fileName+".json", together)
     return
 
+
+placeholders_map, max_entities = readPlaceholderMap()
+permutations = createPermutationsForEntities(max_entities)
+inv_placeholders = invertMap(placeholders_map)
 def main():
 
     path = sys.argv[1]
