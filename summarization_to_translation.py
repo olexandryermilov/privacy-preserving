@@ -1,6 +1,6 @@
 import json
 import sys
-
+from tqdm import tqdm
 
 def process_file(path):
     file = open(path, 'r')
@@ -10,7 +10,7 @@ def process_file(path):
     s = '{"text": "iron cement is a ready for use paste which is laid as a fillet by putty knife or finger in the mould edges ( corners ) of the steel ingot mould .","summary": "iron cement ist eine gebrauchs # # MISC_1 # # fertige Paste , die mit einem Spachtel oder den LOC_1 als Hohlkehle in die Formecken ( Winkel ) der MISC_2 MISC_3 aufgetragen wird ."}'
     obj = json.loads(s)
     new_file.write('{"translation": {"en":"' + obj['text'] + '", "de":"' + obj['summary'] + '"}},')
-    for line in lines[1:-1]:
+    for line in tqdm(lines[1:-1]):
         obj = json.loads(line[:-2])
         new_file.write('{"translation": {"en":"' + obj['text'] +'", "de":"'+ obj['summary']+'"}},')
     for line in lines[-1:]:
