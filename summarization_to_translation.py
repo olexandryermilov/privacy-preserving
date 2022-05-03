@@ -11,7 +11,6 @@ def process_file(path):
     obj = json.loads(s[:-2])
     new_file.write('{"translation": {"en":"' + obj['text'] + '", "de":"' + obj['summary'] + '"}},')
     for line in lines[1:-1]:
-        print(line[:-1])
         obj = json.loads(line[:-2])
         new_file.write('{"translation": {"en":"' + obj['text'] +'", "de":"'+ obj['summary']+'"}},')
     for line in lines[-1:]:
