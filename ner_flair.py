@@ -7,7 +7,7 @@ from segtok.segmenter import split_single
 from tqdm import tqdm
 import json
 
-tagger = SequenceTagger.load('flair/ner-english-fast')
+tagger = SequenceTagger.load('flair/ner-english-ontonotes-fast')
 
 entity_map = dict()
 placeholders_map = dict()
