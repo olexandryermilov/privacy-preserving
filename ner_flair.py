@@ -186,7 +186,7 @@ def main():
     if len(sys.argv)>2 and sys.argv[2] == 'anon':
         methodName = sys.argv[3]
         if methodName == 'ner-placeholder':
-            method = anonymizeCorpusTesting
+            method = anonymizeCorpus
         processFile(path, 'train', True, method, methodName)
         processFile(path,  'test', True, method, methodName)
         processFile(path,   'val', True, method, methodName)
