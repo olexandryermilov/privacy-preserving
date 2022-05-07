@@ -159,8 +159,12 @@ def writeFileJSON(filePath, content):
     f.close()
 
 def processFile(filePath, fileName, anonymize, methodFunc, methodName, task):
-    source = readFile(filePath + fileName + '.source').split("\n")
-    target = readFile(filePath + fileName + '.target').split("\n")
+    if task == 'translation':
+        source = readFile(filePath + fileName + '.source').split("\n")
+        target = readFile(filePath + fileName + '.target').split("\n")
+    else:
+        source = readFile(filePath + fileName + '.en').split("\n")
+        target = readFile(filePath + fileName + '.de').split("\n")
     together = list(zip(source, target))
     if anonymize:
         writeFileJSONAnon(filePath+fileName+"_anonymized_spacy112_"+methodName+".json", together, methodFunc, task)
