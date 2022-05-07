@@ -177,7 +177,7 @@ def processFile(filePath, fileName, anonymize, methodFunc, methodName):
 
 
 def main1():
-    source = readFile('train.source').split("\n")
+    source = readFile('../files/train.source').split("\n")
     calcAllNer(source)
 
 

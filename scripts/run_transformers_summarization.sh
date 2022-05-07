@@ -3,17 +3,17 @@ python3 ~/summarization_experiment/transformers/examples/pytorch/summarization/r
     --do_train \
     --do_eval \
     --do_predict \
-    --train_file ~/summarization_experiment/cnn_dm/train_anonymized.json \
-    --validation_file ~/summarization_experiment/cnn_dm/val.json \
+    --train_file ~/summarization_experiment/cnn_dm/train_anonymized_spacy_ner-placeholder.json \
+    --validation_file ~/summarization_experiment/cnn_dm/val_anonymized_spacy_ner-placeholder.json \
     --test_file ~/summarization_experiment/cnn_dm/test.json \
     --source_prefix "summarize: " \
-    --output_dir ./bart-summarization_anon \
+    --output_dir ./bart-summarization_anon_spacy \
     --per_device_train_batch_size=4 \
     --per_device_eval_batch_size=4 \
     --predict_with_generate \
     --text_column text \
     --summary_column summary \
-    --resume_from_checkpoint checkpoint-79500
+    --resume_from_checkpoint checkpoint-215000
 
 python3 ~/summarization_experiment/transformers/examples/pytorch/summarization/run_summarization.py \
     --model_name_or_path facebook/bart-base \

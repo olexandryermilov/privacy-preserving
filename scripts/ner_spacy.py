@@ -14,7 +14,7 @@ placeholders_map = dict()
 total = 0
 
 def readPlaceholderMap():
-    with open("placeholders_spacy_summarization1.json", "r") as file:
+    with open("../files/placeholders_spacy.json", "r") as file:
         entities = dict()
         data = json.load(file)
         for k in tqdm(data):
@@ -38,6 +38,7 @@ def createPermutationsForEntities(entities):
         for i in range(len(perm)):
             permutation[i+1] = perm[i] + 1
         permutations[k] = permutation
+    print(permutations.keys())
     return permutations
 
 def readFile(filePath):
@@ -63,12 +64,13 @@ def anonymizeCorpusPermutation(corpus, f, ner):
       if entity.ent_type_:
           result += 1
           entity_word = entity.text
+          #print(entity.ent_type_)
           replacement = placeholders_map[entity_word]
           permutation = permutations[entity.ent_type_]
           try:
             number_of_placeholder = permutation[numFromPlaceholder(replacement)]
           except:
-            print(f"{entity.ent_type_} {numFromPlaceholder(replacement)} {entity_word}")
+            print(f"{entity.ent_type_} {replacement} {numFromPlaceholder(replacement)} {entity_word}")
           res.append(inv_placeholders[entity.ent_type_ + "_" + str(number_of_placeholder)])
       else:
           res.append(entity.text)
@@ -135,7 +137,7 @@ def writeFileJSONAnon(filePath, content, anonFunc, task):
 
     f.write(']}')
     f.close()
-    with open("all_ners.txt","w") as f1:
+    with open("../files/all_ners.txt", "w") as f1:
         f1.write(str(result/len(content)))
 
 

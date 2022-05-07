@@ -50,6 +50,10 @@ def anonymizeCorpus(corpus):
   anonymized_corpus = replaceNEWithEntityGroup(corpus, named_entities)
   return anonymized_corpus
 
+
+def closestWord2Vec(corpus):
+    named_entities = obtain_named_entities(corpus)
+
 def writeFileJSONAnon(filePath, content, anonFunc):
     f = open(filePath, "a")
     f.write('{"data":[')
