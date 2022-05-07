@@ -159,7 +159,7 @@ def writeFileJSON(filePath, content):
     f.close()
 
 def processFile(filePath, fileName, anonymize, methodFunc, methodName, task):
-    if task == 'translation':
+    if task == 'summarization':
         source = readFile(filePath + fileName + '.source').split("\n")
         target = readFile(filePath + fileName + '.target').split("\n")
     else:
