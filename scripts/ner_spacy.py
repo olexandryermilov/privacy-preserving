@@ -4,6 +4,7 @@ import json
 import numpy as np
 
 import spacy
+from spacy.tokens import DocBin
 
 NER = spacy.load("en_core_web_sm")
 DE_NER = spacy.load("de_core_news_sm")
@@ -14,7 +15,7 @@ placeholders_map = dict()
 total = 0
 
 def readPlaceholderMap():
-    with open("../files/placeholders_spacy.json", "r") as file:
+    with open("placeholders_spacy.json", "r") as file:
         entities = dict()
         data = json.load(file)
         for k in tqdm(data):
@@ -81,6 +82,7 @@ def anonymizeCorpus(corpus, f, ner):
   processed = ner(corpus)
   res = []
   result = 0
+  docs.append(processed)
   for entity in processed:
       if entity.ent_type_:
           result += 1
@@ -137,7 +139,9 @@ def writeFileJSONAnon(filePath, content, anonFunc, task):
 
     f.write(']}')
     f.close()
-    with open("../files/all_ners.txt", "w") as f1:
+    db = DocBin(docs = docs)
+    db.to_disk(f"{task}_doc_bins.gz")
+    with open("../all_ners.txt", "w") as f1:
         f1.write(str(result/len(content)))
 
 
@@ -159,15 +163,16 @@ def processFile(filePath, fileName, anonymize, methodFunc, methodName, task):
     target = readFile(filePath + fileName + '.target').split("\n")
     together = list(zip(source, target))
     if anonymize:
-        writeFileJSONAnon(filePath+fileName+"_anonymized_spacy2_"+methodName+".json", together, methodFunc, task)
+        writeFileJSONAnon(filePath+fileName+"_anonymized_spacy112_"+methodName+".json", together, methodFunc, task)
     else:
         writeFileJSON(filePath+fileName+".json", together)
     return
 
 
-placeholders_map, max_entities = readPlaceholderMap()
-permutations = createPermutationsForEntities(max_entities)
-inv_placeholders = invertMap(placeholders_map)
+#placeholders_map, max_entities = readPlaceholderMap()
+#permutations = createPermutationsForEntities(max_entities)
+#inv_placeholders = invertMap(placeholders_map)
+docs = []
 def main():
 
     path = sys.argv[1]
@@ -182,7 +187,7 @@ def main():
         processFile(path,  'test', True, method, methodName, task)
         processFile(path,   'val', True, method, methodName, task)
         if methodName == 'ner-placeholder':
-            with open(f'placeholders_spacy_{task}1.json', 'w') as f:
+            with open(f'placeholders_spacy_{task}12.json', 'w') as f:
                 f.write(json.dumps(entity_map))
     else:
         processFile(path, 'train', False, None, "", "")
