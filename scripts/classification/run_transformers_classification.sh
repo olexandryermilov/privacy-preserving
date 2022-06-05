@@ -1,0 +1,32 @@
+python3 ~/summarization_experiment/transformers/examples/pytorch/text-classification/run_glue.py \
+    --model_name_or_path bert-base-cased \
+    --do_train \
+    --do_eval \
+    --do_predict \
+    --train_file ~/classification/train_anonymized_spacy_ner-placeholder.json \
+    --validation_file ~/classification/test.json \
+    --test_file ~/classification/test.json \
+    --max_seq_length 128 \
+    --per_device_train_batch_size 4 \
+    --learning_rate 2e-5 \
+    --num_train_epochs 3 \
+    --save_steps 20000 \
+    --seed 100 \
+    --output_dir ./imdb-anon-100/
+
+python3 ~/summarization_experiment/transformers/examples/pytorch/summarization/run_summarization.py \
+    --model_name_or_path facebook/bart-base \
+    --do_train \
+    --do_eval \
+    --do_predict \
+    --train_file ~/summarization_experiment/cnn_dm/train.json \
+    --validation_file ~/summarization_experiment/cnn_dm/val.json \
+    --test_file ~/summarization_experiment/cnn_dm/test.json \
+    --source_prefix "summarize: " \
+    --output_dir ~/summarization_experiment/cnn_dm/bart-tst-summarization \
+    --per_device_train_batch_size=4 \
+    --per_device_eval_batch_size=4 \
+    --predict_with_generate \
+    --text_column text \
+    --summary_column summary \
+    --resume_from_checkpoint checkpoint-79500
