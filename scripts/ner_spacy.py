@@ -11,8 +11,16 @@ DE_NER = spacy.load("de_core_news_sm")
 
 entity_map = dict()
 placeholders_map = dict()
+placeholder_to_word_map = dict()
 
 total = 0
+
+def getEntityAndNumberFromReplacement(replacement):
+    splitted = replacement.split('_')
+    entity_name = splitted[:-1].join("_")
+    entity_num = int(splitted[-1])
+    return entity_name, entity_num
+
 
 def readPlaceholderMap():
     with open("placeholders_spacy.json", "r") as file:
@@ -87,14 +95,16 @@ def anonymizeCorpus(corpus, f, ner):
       if entity.ent_type_:
           result += 1
           entity_word = entity.text
-          if entity_word not in entity_map:
-              entity_type = entity.ent_type_
+          entity_type = entity.ent_type_
+          if entity_type not in entity_map or entity_word not in entity_map[entity_type]:
               if entity_type not in placeholders_map:
                   placeholders_map[entity_type] = 1
               else:
                   placeholders_map[entity_type] = placeholders_map[entity_type] + 1
-              entity_map[entity_word] = entity_type + "_" + str(placeholders_map[entity_type])
-          replacement = entity_map[entity_word]
+              if entity_type not in entity_map:
+                  entity_map[entity_type] = dict()
+              entity_map[entity_type][entity_word] = entity_type + "_" + str(placeholders_map[entity_type])
+          replacement = entity_map[entity_type][entity_word]
           res.append(replacement)
       else:
           res.append(entity.text)
@@ -139,8 +149,8 @@ def writeFileJSONAnon(filePath, content, anonFunc, task):
 
     f.write(']}')
     f.close()
-    db = DocBin(docs = docs)
-    db.to_disk(f"{task}_doc_bins.gz")
+    #db = DocBin(docs = docs)
+    #db.to_disk(f"{task}_doc_bins.gz")
     with open("../all_ners.txt", "w") as f1:
         f1.write(str(result/len(content)))
 
@@ -167,7 +177,7 @@ def processFile(filePath, fileName, anonymize, methodFunc, methodName, task):
         target = readFile(filePath + fileName + '.de').split("\n")
     together = list(zip(source, target))
     if anonymize:
-        writeFileJSONAnon(filePath+fileName+"_anonymized_spacy112_"+methodName+".json", together, methodFunc, task)
+        writeFileJSONAnon(filePath+fileName+"_anonymized_spacy_"+methodName+".json", together, methodFunc, task)
     else:
         writeFileJSON(filePath+fileName+".json", together)
     return
@@ -187,11 +197,11 @@ def main():
             method = anonymizeCorpus
         elif methodName == "ner-permutation":
             method = anonymizeCorpusPermutation
-        processFile(path, 'train', True, method, methodName, task)
+        processFile(path, 'train1', True, method, methodName, task)
         processFile(path,  'test', True, method, methodName, task)
         processFile(path,   'val', True, method, methodName, task)
         if methodName == 'ner-placeholder':
-            with open(f'placeholders_spacy_{task}12.json', 'w') as f:
+            with open(f'placeholders_spacy_{task}.json', 'w') as f:
                 f.write(json.dumps(entity_map))
     else:
         processFile(path, 'train', False, None, "", "")
