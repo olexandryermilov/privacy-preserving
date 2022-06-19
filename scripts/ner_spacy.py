@@ -197,7 +197,7 @@ def main():
             method = anonymizeCorpus
         elif methodName == "ner-permutation":
             method = anonymizeCorpusPermutation
-        processFile(path, 'train1', True, method, methodName, task)
+        processFile(path, 'train', True, method, methodName, task)
         processFile(path,  'test', True, method, methodName, task)
         processFile(path,   'val', True, method, methodName, task)
         if methodName == 'ner-placeholder':
